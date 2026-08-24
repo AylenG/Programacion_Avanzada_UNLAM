@@ -1,0 +1,23 @@
+# Compilación Java
+bin/
+out/
+target/
+*.class
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+# Archivos del sistema y temporales
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
