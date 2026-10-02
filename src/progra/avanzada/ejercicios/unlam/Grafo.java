@@ -1,8 +1,8 @@
 package progra.avanzada.ejercicios.unlam;
 
-import java.lang.reflect.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.List;
 
@@ -26,7 +26,15 @@ public class Grafo {
             { '0', '0', '0', '1', '1' }
         };
         
-        char[][] grid = grid2;
+     // Ejemplo 2 -> esperado [5, 2, 2, 1]
+        char[][] grid3 = {
+            { '1', '1', '1', '0', '1' },
+            { '1', '1', '0', '0', '1' },
+            { '0', '0', '0', '0', '0' },
+            { '0', '1', '0', '1', '1' }
+        };
+        
+        char[][] grid = grid3;
         List<Integer> res = new ArrayList<>();
 
         int m = grid.length;
@@ -61,7 +69,7 @@ public class Grafo {
 
                 if(grid[i][j] == '1' && !visitado[i][j]) {
                     pila.push(new int[]{i, j});
-                    visitado[i][j]=true;
+                    visitado[i][j] = true;
                 }
                 
                 while(!pila.isEmpty()) {
@@ -70,21 +78,21 @@ public class Grafo {
                     f = tope[0];
                     c = tope[1];
                     
-                    if(f - 1 >= 0 && grid[f-1][c] == '1') {
+                    if(f - 1 >= 0 && grid[f-1][c] == '1' && !visitado[f-1][c]) {
                         pila.push(new int[]{f-1, c});
-                        visitado[f-1][c]=true;
+                        visitado[f-1][c] = true;
                     }
-                    if(f + 1 <= m && grid[f+1][c] == '1') {
+                    if(f + 1 < m && grid[f+1][c] == '1' && !visitado[f+1][c]) {
                         pila.push(new int[]{f+1, c});
-                        visitado[f+1][c]=true;
+                        visitado[f+1][c] = true;
                     }
-                    if(c - 1 >= 0 && grid[f][c-1] == '1') {
+                    if(c - 1 >= 0 && grid[f][c-1] == '1' && !visitado[f][c-1]) {
                         pila.push(new int[]{f, c-1});
-                        visitado[f][c-1]=true;
+                        visitado[f][c-1] = true;
                     }
-                    if(c + 1 <= n && grid[f][c+1] == '1') {
+                    if(c + 1 < n && grid[f][c+1] == '1' && !visitado[f][c+1]) {
                         pila.push(new int[]{f, c+1});
-                        visitado[f][c+1]=true;
+                        visitado[f][c+1] = true;
                     }
                 }
 
@@ -94,5 +102,7 @@ public class Grafo {
                 }
             }
         }
+        
+        res.sort(Comparator.reverseOrder());
     }
 }
