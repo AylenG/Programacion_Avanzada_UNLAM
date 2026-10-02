@@ -52,21 +52,47 @@ public class Grafo {
         Deque<int[]> pila = new ArrayDeque<>();
         boolean[][] visitado = new boolean[m][n];
         int[] tope;
-        int tamanio = 0, i = 0, j = 0;
+        int tamanio = 0, f, c;
         
-        pila.push(new int[]{0, 0});
-        visitado[0][0]=true;
-        
-        while(!pila.isEmpty()) {
-        	tope = pila.pop();
-        	
-        	if(grid[i][j] == '1') {
-        		tamanio ++;
-        		
-        	}
-        	
-        	
+        for(int i=0; i < m; i++) {
+            for(int j=0; j < n; j++) {
+
+                if(visitado[i][j]) continue;
+
+                if(grid[i][j] == '1' && !visitado[i][j]) {
+                    pila.push(new int[]{i, j});
+                    visitado[i][j]=true;
+                }
+                
+                while(!pila.isEmpty()) {
+                    tope = pila.pop();
+                    tamanio++;
+                    f = tope[0];
+                    c = tope[1];
+                    
+                    if(f - 1 >= 0 && grid[f-1][c] == '1') {
+                        pila.push(new int[]{f-1, c});
+                        visitado[f-1][c]=true;
+                    }
+                    if(f + 1 <= m && grid[f+1][c] == '1') {
+                        pila.push(new int[]{f+1, c});
+                        visitado[f+1][c]=true;
+                    }
+                    if(c - 1 >= 0 && grid[f][c-1] == '1') {
+                        pila.push(new int[]{f, c-1});
+                        visitado[f][c-1]=true;
+                    }
+                    if(c + 1 <= n && grid[f][c+1] == '1') {
+                        pila.push(new int[]{f, c+1});
+                        visitado[f][c+1]=true;
+                    }
+                }
+
+                if(tamanio > 0) {
+                    res.add(tamanio);
+                    tamanio = 0;
+                }
+            }
         }
-    	
     }
 }
