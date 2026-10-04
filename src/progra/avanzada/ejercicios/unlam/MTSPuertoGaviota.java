@@ -13,8 +13,8 @@ import progra.avanzada.estructuras.ColaPrioridad;
 public class MTSPuertoGaviota {
 
 	// Tipos de conexion -> peso de la arista
-	static final int PESO_TUNEL = 1;
-	static final int PESO_PUENTE = 2;
+	static final int PESO_TUNEL = 0;
+	static final int PESO_PUENTE = 1;
 
 	record Arista(int desde, int hasta, int peso) {}
 
@@ -169,7 +169,7 @@ public class MTSPuertoGaviota {
 		
 		List<Arista> mst = new ArrayList<Arista>();
 		
-		int contadorPuentes = 0;
+		int pesoTotal = 0;
 		
 		visitados.add(1);
 		for(Arista arista: grafo.get(1)) {
@@ -182,8 +182,7 @@ public class MTSPuertoGaviota {
 			if(!visitados.contains(minimo.hasta())) {
 				visitados.add(minimo.hasta);
 				mst.add(minimo);
-				
-				if (minimo.peso == PESO_PUENTE) contadorPuentes++;
+				pesoTotal += minimo.peso;
 				
 				for(Arista arista: grafo.get(minimo.hasta)) {
 					if (!visitados.contains(arista.hasta)) {
@@ -193,6 +192,6 @@ public class MTSPuertoGaviota {
 			}
 		}
 		
-		return contadorPuentes;
+		return pesoTotal;
 	}
 }
