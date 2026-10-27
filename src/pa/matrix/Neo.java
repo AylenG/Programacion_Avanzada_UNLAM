@@ -24,24 +24,29 @@ public class Neo {
 				{ 18, 21, 23, 26, 30 } };
 
 		// matriz 4x4
-//		probar(neo, m4, 1);  // esperado [1, 1]
-//		probar(neo, m4, 5);  // esperado [1, 1]
-//		probar(neo, m4, 3);  // esperado [2, 0]
-//		probar(neo, m4, 7);  // esperado [2, 0]
-//		probar(neo, m4, 10);  // esperado [1, 1]
-//		probar(neo, m4, 11);  // esperado [1, 1]
-//		probar(neo, m4, 13);  // esperado [1, 1]
-//		probar(neo, m4, 15);  // esperado [1, 1]
-//		probar(neo, m4, 17); // esperado [-1, -1]
-//		probar(neo, m4, 20); // esperado [-1, -1]
+		probar(neo, m4, 1);  // esperado [1, 1]
+		probar(neo, m4, 5);  // esperado [1, 1]
+		probar(neo, m4, 3);  // esperado [2, 0]
+		probar(neo, m4, 7);  // esperado [2, 0]
+		probar(neo, m4, 10);  // esperado [1, 1]
+		probar(neo, m4, 11);  // esperado [1, 1]
+		probar(neo, m4, 13);  // esperado [1, 1]
+		probar(neo, m4, 15);  // esperado [1, 1]
+		probar(neo, m4, 17); // esperado [-1, -1]
+		probar(neo, m4, 20); // esperado [-1, -1]
 		
 		// matriz 1x1
 //		probar(neo, new int[][] { { 7 } }, 7); // esperado [0, 0]
 		
 		//matriz 5x5
-		probar(neo, m5, 5);  // esperado [1, 1]
-		probar(neo, m5, 30); // esperado [4, 4]
-		probar(neo, m5, 20); // esperado [-1, -1]
+//		probar(neo, m5, 5);  // esperado [1, 1]
+//		probar(neo, m5, 9); // esperado [4, 4]
+//		probar(neo, m5, 12); // esperado [4, 4]
+//		probar(neo, m5, 10); // esperado [4, 4]
+//		probar(neo, m5, 23); // esperado [4, 4]
+//		probar(neo, m5, 28); // esperado [4, 4]
+//		probar(neo, m5, 30); // esperado [4, 4]
+//		probar(neo, m5, 20); // esperado [-1, -1]
 	}
 
 	private static void probar(Neo neo, int[][] m, int objetivo) {
@@ -59,7 +64,11 @@ public class Neo {
 	 *         no se encuentra
 	 */
 	public int[] buscarAgenteSmith(int[][] matrizDatos, int codigoSmith) {
-		return buscarAgenteSmith(0, 0, matrizDatos.length, matrizDatos, codigoSmith);
+		if(matrizDatos.length == 0) {
+			return new int[] { -1, -1 };
+		} else {
+			return buscarAgenteSmith(0, 0, matrizDatos.length, matrizDatos, codigoSmith);			
+		}
 	}
 	
 	public int[] buscarAgenteSmith(int origenFil, int origenCol, int n, int[][] matrizDatos, int codigoSmith) {
@@ -71,8 +80,9 @@ public class Neo {
 				return new int[] { -1, -1 };
 			}
 		}
-		
-		int nNuevo = n / 2;
+
+		int nNuevo = n - n / 2; // mitad redondeada hacia arriba, los cuadrantes se pisan si n es impar
+		int ini = n - nNuevo; // donde empieza la segunda mitad
 		ArrayList<Integer> cuadrantesCandidatos = new ArrayList<>();
 		int[] res = { -1, -1 };
 		
@@ -81,17 +91,17 @@ public class Neo {
 			cuadrantesCandidatos.add(1);
 		}
 		
-		if(matrizDatos[origenFil][origenCol + n - nNuevo] <= codigoSmith 
+		if(matrizDatos[origenFil][origenCol + ini] <= codigoSmith 
 				&& matrizDatos[origenFil + nNuevo - 1][origenCol + n - 1] >= codigoSmith) {
 			cuadrantesCandidatos.add(2);
 		}
 		
-		if(matrizDatos[origenFil + nNuevo][origenCol] <= codigoSmith 
+		if(matrizDatos[origenFil + ini][origenCol] <= codigoSmith 
 				&& matrizDatos[origenFil + n - 1][origenCol + nNuevo - 1] >= codigoSmith) {
 			cuadrantesCandidatos.add(3);
 		} 
 		
-		if(matrizDatos[origenFil + nNuevo][origenCol + nNuevo] <= codigoSmith 
+		if(matrizDatos[origenFil + ini][origenCol + ini] <= codigoSmith 
 				&& matrizDatos[origenFil + n - 1][origenCol + n - 1] >= codigoSmith) {
 			cuadrantesCandidatos.add(4);
 		}
@@ -100,11 +110,11 @@ public class Neo {
 			switch(cuadrante) {
 				case 1: res = buscarAgenteSmith(origenFil, origenCol, nNuevo, matrizDatos, codigoSmith);
 				break;
-				case 2: res = buscarAgenteSmith(origenFil, origenCol + n - nNuevo, nNuevo, matrizDatos, codigoSmith);
+				case 2: res = buscarAgenteSmith(origenFil, origenCol + ini, nNuevo, matrizDatos, codigoSmith);
 				break;
-				case 3: res = buscarAgenteSmith(origenFil + nNuevo, origenCol, nNuevo, matrizDatos, codigoSmith);
+				case 3: res = buscarAgenteSmith(origenFil + ini, origenCol, nNuevo, matrizDatos, codigoSmith);
 				break;
-				case 4: res = buscarAgenteSmith(origenFil + nNuevo, origenCol + nNuevo, nNuevo, matrizDatos, codigoSmith);
+				case 4: res = buscarAgenteSmith(origenFil + ini, origenCol + ini, nNuevo, matrizDatos, codigoSmith);
 				break;
 			}
 			
